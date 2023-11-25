@@ -175,7 +175,7 @@ const StripeTerminal = () => {
   const isProcessable = amount > 0 && readerId;
 
   return (
-    <div className="sr-root">
+    <div className="sr-root" style={{ textAlign: "start" }}>
       <main className="sr-main">
         <h2>Collecting Payments with Stripe Terminal</h2>
         <p>Select a reader and input an amount for the transaction.</p>
