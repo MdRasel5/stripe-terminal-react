@@ -17,8 +17,6 @@ const StripeTerminal = () => {
         const response = await fetch("http://127.0.0.1:8000/api/readers");
         const result = await response.json();
 
-        console.log("Readers result 1:", result);
-
         // Assuming result.readersList.data is an array
         setReadersList(result.readersList.data);
       } catch (error) {
@@ -55,8 +53,6 @@ const StripeTerminal = () => {
 
       const result = await response.json();
 
-      console.log("Readers result 2:", result);
-
       const { error } = result;
 
       if (error) {
@@ -66,6 +62,7 @@ const StripeTerminal = () => {
 
       setReader(result.reader);
       setPaymentIntent(result.paymentIntent);
+
       addMessage(
         `Processing payment for ${amount} on reader ${result.reader.label}`
       );
@@ -132,8 +129,38 @@ const StripeTerminal = () => {
     }
   };
 
-  const cancelAction = () => {
-    // Add logic for cancel action if needed
+  const cancelAction = async () => {
+    try {
+      const response = await fetch(
+        "http://127.0.0.1:8000/api/payments/cancel-payment",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ readerId }),
+        }
+      );
+
+      const result = await response.json();
+      const { error } = result;
+
+      if (error) {
+        // Handle error
+        console.error("Error:", error.message);
+        return;
+      }
+
+      setReaderId(result.reader.id);
+      // Handle success
+      console.log(
+        `Canceled reader action on ${result.reader.label} (${result.reader.id})`
+      );
+      // Reset logic
+      reset();
+    } catch (error) {
+      console.error("Error cancelling action:", error.message);
+    }
   };
 
   // Computed properties
