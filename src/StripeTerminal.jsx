@@ -266,7 +266,7 @@ const StripeTerminal = () => {
           </section>
 
           {/* Include SrMessages component here if needed */}
-          <Messages />
+          <Messages messages={messages} />
         </form>
       </main>
     </div>
